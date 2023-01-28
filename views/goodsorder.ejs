@@ -1,0 +1,39 @@
+<form action="/saveOrder" method="post">
+    <div class="mb-3 visually-hidden">
+        <input class="form-control" type="text" name="clientId" value="<%=clientId%>">
+    </div>
+    <div class="row mb-3">
+        <label for="inputVolume" class="col-sm-1 col-form-label">Объем:</label>
+        <div class="col-sm-3">
+            <input type="number" name="volume" class="form-control" id="inputVolume" placeholder="Объем" min="0"
+                value="<%=order?.volume%>" required
+                onchange="document.getElementById('milkSumm').innerText=Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB' }).format(value * <%=prices['Молоко фермерское']%>)">
+        </div>
+        <label class="col-sm-1 col-form-label " id="milkSumm">
+            <%=Intl.NumberFormat('ru', { style: 'currency' , currency: 'RUB' }).format(new
+                Number((order?.volume?order?.volume:0) * prices['Молоко фермерское']))%>
+        </label>
+        <label for="selectPail" class="col-sm-1 col-form-label ">Тара:</label>
+        <div class="col-sm-6">
+            <select name="pail" class="form-control" id="selectPail">
+                <option value="None" <%if (order?.pail==="None" ){%>selected<%}%>>Нет</option>
+                <option value="5 л" <%if (order?.pail==="5 л" ){%>selected<%}%>>Ведро 5 л</option>
+                <option value="10 л" <%if (order?.pail==="10 л" ){%>selected<%}%>>Ведро 10 л</option>
+            </select>
+        </div>
+        <%#
+        <div class="col-sm-1">
+            <label class="col-sm-1 col-form-label " id="pailkSumm">0</label>
+        </div>
+        %>
+    </div>
+    <div class="row mb-3">
+        <label for="textAppendix" class="col-sm-1 col-form-label">Примечания:</label>
+        <div class="col-sm-11">
+            <textarea name="appendix" id="textAppendix" class="form-control "
+                placeholder="Примечания к заказу"><%=order?.appendix%></textarea>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Заказать</button>
+
+</form>

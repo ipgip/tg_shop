@@ -1,0 +1,100 @@
+<form action="/saveOrder" method="post">
+    <div class="mb-3 row <%if(reg){%>visually-hidden<%}%>">
+        <label for="inputLogin" class="col-4 col-form-label">Login:</label>
+        <div class="col-8">
+            <input type="text" class="form-control" name="login" id="inputLogin" placeholder="Login"
+                <%if(login){%>value="<%=login%>" readonly<%}%>>
+        </div>
+    </div>
+    <div class="mb-3 row <%if(reg){%>visually-hidden<%}%>">
+        <label for="inputPass" class="col-4 col-form-label">Пароль:</label>
+        <div class="col-8">
+            <input type="password" class="form-control" name="password" id="inputPass" placeholder="Пароль"
+                <%if(password){%>value="<%=password%>" readonly<%}%>>
+        </div>
+    </div>
+    <div class="mb-3 visually-hidden">
+        <input type="text" class="form-control" name="orderId" id="inputId" value="<%=order?._id%>">
+    </div>
+    <div class="row mb-3">
+        <label for="inputFullName" class="col-sm-2 col-form-label">Полное имя</label>
+        <div class="col-sm-10">
+            <input name="FullName" class="form-control" id="inputFullName" placeholder="Полное имя"
+                value="<%=order?.client.fullName%>">
+        </div>
+    </div>
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" name="role" id="inputRole"
+        <%if(order?.client.role=='saler'){%>checked<%}%> onchange="if (checked) document.getElementById('labelAddress').innerText='Адрес склада'; else document.getElementById('labelAddress').innerText='Адрес доставки';">
+        <label class="form-check-label" for="inputRole">Продавец</label>
+    </div>
+
+    <div id="labelAddress" for="inputAddress" class="col-sm-2 col-form-label">Адрес <%if(order?.client.role!='saler'){%>доставки<%}else{%>склада<%}%></div>
+    <div class="row mb-3">
+        <div class="col-sm-3">
+            <input name="town" class="form-control" id="inputAddressTown" placeholder="Город"
+                value="<%=order?.client.town%>">
+        </div>
+        <div class="col-sm-3">
+            <input name="street" class="form-control" id="inputAddressStreet" placeholder="Улица"
+                value="<%=order?.client.street%>">
+        </div>
+        <div class="col-sm-2">
+            <input name="house" class="form-control" id="inputAddressHouse" placeholder="Дом"
+                value="<%=order?.client.house%>">
+        </div>
+        <div class="col-sm-2">
+            <input name="entrace" class="form-control" id="inputAddressEntrace" placeholder="Подъезд"
+                value="<%=order?.client.entrance%>">
+        </div>
+        <div class="col-sm-2">
+            <input name="appartment" class="form-control" id="inputAddressAppartments" placeholder="Квартира"
+                value="<%=order?.client.appartment%>">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="inputAddressAddition" class="col-sm-2 col-form-label ">Дополнительная информация</label>
+        <div class="col-sm-10">
+            <textarea name="addition" class="form-control" id="inputAddressAddition"
+                placeholder="Дополнительно: код домофона или предпочтительное время доставки"><%=order?.client.addition%></textarea>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="inputPhone" class="col-sm-2 col-form-label">Телефон</label>
+        <div class="col-sm-10">
+            <input type="text" name="phone" class="form-control" id="inputPhone" placeholder="Телефон"
+                value="<%=order?.client.phone%>">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="inputVolume" class="col-sm-1 col-form-label">Объем:</label>
+        <div class="col-sm-3">
+            <input type="number" name="volume" class="form-control" id="inputVolume" placeholder="Объем" min="0"
+                value="<%=order?.volume%>" required
+                onchange="document.getElementById('milkSumm').innerText=Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB' }).format(value * <%=prices['Молоко фермерское']%>)">
+        </div>
+        <label class="col-sm-1 col-form-label " id="milkSumm">
+            <%=Intl.NumberFormat('ru', { style: 'currency' , currency: 'RUB' }).format(new
+                Number((order?.volume?order?.volume:0) * prices['Молоко фермерское']))%>
+        </label>
+        <label for="selectPail" class="col-sm-1 col-form-label ">Тара:</label>
+        <div class="col-sm-6">
+            <select name="pail" class="form-control" id="selectPail">
+                <option value="None" <%if (order?.pail==="None" ){%>selected<%}%>>Нет</option>
+                <option value="5 л" <%if (order?.pail==="5 л" ){%>selected<%}%>>Ведро 5 л</option>
+                <option value="10 л" <%if (order?.pail==="10 л" ){%>selected<%}%>>Ведро 10 л</option>
+            </select>
+        </div>
+        <%# <div class="col-sm-1">
+            <label class="col-sm-1 col-form-label " id="pailkSumm">0</label>
+    </div>
+    %> </div>
+    <div class="row mb-3">
+        <label for="textAppendix" class="col-sm-1 col-form-label">Примечания:</label>
+        <div class="col-sm-11">
+            <textarea name="appendix" id="textAppendix" class="form-control "
+                placeholder="Примечания к заказу"><%=order?.appendix%></textarea>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Заказать</button>
+</form>

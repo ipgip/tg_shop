@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="RU">
+
+<head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+</head>
+
+<body>
+    <header>
+        <%- include('navigation') %>
+    </header>
+    <main>
+        <form action="/saveOrder" method="post">
+            <div class="mb-3 row visually-hidden">
+                <div class="col-8">
+                    <input type="text" class="form-control" name="clientId" id="clientId" 
+                       value="<%= saler %>" readonly>
+                </div>
+            </div>
+        
+            <div class="row mb-3">
+                <label for="inputVolume" class="col-sm-1 col-form-label">Объем:</label>
+                <div class="col-sm-3">
+                    <input type="number" name="volume" class="form-control" id="inputVolume" placeholder="Объем" min="0"
+                        value="<%=order?.volume%>" required
+                        onchange="document.getElementById('milkSumm').innerText=Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB' }).format(value * <%=prices['Молоко фермерское']%>)">
+                </div>
+                <label class="col-sm-1 col-form-label " id="milkSumm">
+                    <%=Intl.NumberFormat('ru', { style: 'currency' , currency: 'RUB' }).format(new
+                        Number((order?.volume?order?.volume:0) * prices['Молоко фермерское']))%>
+                </label>
+                <label for="selectPail" class="col-sm-1 col-form-label ">Тара:</label>
+                <div class="col-sm-6">
+                    <select name="pail" class="form-control" id="selectPail">
+                        <option value="None" <%if (order?.pail==="None" ){%>selected<%}%>>Нет</option>
+                        <option value="5 л" <%if (order?.pail==="5 л" ){%>selected<%}%>>Ведро 5 л</option>
+                        <option value="10 л" <%if (order?.pail==="10 л" ){%>selected<%}%>>Ведро 10 л</option>
+                    </select>
+                </div>
+                <%# <div class="col-sm-1">
+                    <label class="col-sm-1 col-form-label " id="pailkSumm">0</label>
+            </div>
+            %> </div>
+            <div class="row mb-3">
+                <label for="textAppendix" class="col-sm-1 col-form-label">Примечания:</label>
+                <div class="col-sm-11">
+                    <textarea name="appendix" id="textAppendix" class="form-control "
+                        placeholder="Примечания к заказу"><%=order?.appendix%></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Заказать</button>
+        </form>
+    </main>
+    <footer>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+        </script>
+</body>
+
+</html>

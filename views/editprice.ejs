@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="RU">
+
+<head>
+    <title>Редактирование прайса</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script>
+        function addRow() {
+            // let t = document.getElementById('priceTable');
+            // let r = t.insertRow(t.rows.length);
+            // let cell1 = r.insertCell(0);
+            // let cell2 = r.insertCell(1);
+            // let cell3 = r.insertCell(2);
+            // let cell4 = r.insertCell(3);
+            // cell1.innerHTML = '<td class="visually-hidden"><input type="hidden" class="form-control" name="id" id="id"/></td>';
+            // cell2.innerHTML = '<td scope="row"><input type="text" class="form-control" name="product" id="product"/></td>';
+            // cell3.innerHTML = '<td><input type="number" class="form-control" name="price" id="price" min="0"/></td>';
+            // cell4.innerHTML = '<td class="text-center"><div class="form-check "><input type="checkbox" class="form-check-input" name="active" id="active" /></div></td>';
+            let t = document.getElementById('priceTable').getElementsByTagName('tbody')[0];
+            let r = document.createElement("tr");
+            t.appendChild(r);
+            let td1 = document.createElement("td");
+            td1.classList.add("visually-hidden");
+            let td2 = document.createElement("td");
+            let td3 = document.createElement("td");
+            let td4 = document.createElement("td");
+            td4.classList.add("text-center");
+            r.appendChild(td1);
+            r.appendChild(td2);
+            r.appendChild(td3);
+            r.appendChild(td4);
+            td1.innerHTML = '<input type="text" class="form-control" name="id" id="id">';
+            td2.innerHTML = '<input type="text" class="form-control" name="product" id="product">';
+            td3.innerHTML = '<input type="number" class="form-control" name="price" id="price" min="0">';
+            td4.innerHTML = '<div class="form-check"><input type="checkbox" class="form-check-input" name="active" id="active"></div>';
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <%- include ('m1') %>
+    </header>
+    <main>
+        <button class="btn btn-primary" onclick="addRow()">+</button>
+        <form action="/saveprice" method="post">
+            <div class="visually-hidden">
+                <input type="text" class="form-control" name="saler" id="saler" value="<%= saler %>">
+            </div>
+
+            <div class="table-responsive">
+                <table  class="table table-light" id="priceTable">
+                    <thead>
+                        <tr>
+                            <th class="visually-hidden">Id</th>
+                            <th scope="col">Наменование</th>
+                            <th scope="col">Цена</th>
+                            <th scope="col">Активный</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <% price.forEach(item=> { %>
+                            <tr class="">
+                                <td class="visually-hidden">
+                                    <input type="text" class="form-control" name="id" id="id" value="<%= item._id %>">
+                                </td>
+                                <td scope="row">
+                                    <input type="text" class="form-control" name="product" id="product"
+                                        value="<%= item.product %>">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="price" id="price"
+                                        value="<%= item.price %>" min="0">
+                                </td>
+                                <td class="text-center">
+                                    <div class="form-check ">
+                                        <input type="checkbox" class="form-check-input" name="active"
+                                            value="<%= item._id %>" id="active" <% if (item.active) { %>checked<% } %> >
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+
+    </main>
+    <footer>
+        <!-- footer here -->
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+        </script>
+</body>
+
+</html>

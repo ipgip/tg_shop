@@ -1,0 +1,76 @@
+<form action="/userprofile" method="post">
+    <div class="mb-3 row visually-hidden">
+        <label for="salerId" class="col-4 col-form-label">Id:</label>
+        <div class="col-8">
+            <input type="text" class="form-control" name="salerId" id="salerId" 
+                <%if(saler){%>value="<%= saler?._id %>" <%}%>>
+        </div>
+    </div>
+    <div class="mb-3 row visually-hidden">
+        <label for="inputLogin" class="col-4 col-form-label">Login:</label>
+        <div class="col-8">
+            <input type="text" class="form-control" name="login" id="inputLogin" placeholder="Login" readonly
+               value="<%if(saler){%><%= saler?.login %><%}else{%><%= login %><%}%>" >
+        </div>
+    </div>
+    <div class="mb-3 row visually-hidden">
+        <label for="inputPass" class="col-4 col-form-label">Пароль:</label>
+        <div class="col-8">
+            <input type="password" class="form-control" name="password" id="inputPass" placeholder="Пароль" readonly
+            value="<%if(saler){%><%= saler?.password %><%}else{%><%= password %><%}%>">
+        </div>
+    </div>
+
+
+    <div class="row mb-3">
+        <label for="inputFullName" class="col-sm-2 col-form-label">Полное имя</label>
+        <div class="col-sm-10">
+            <input name="FullName" class="form-control" id="inputFullName" placeholder="Полное имя"
+                value="<%= saler?.fullName %>">
+        </div>
+    </div>
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" name="role" id="inputRole"
+        <%if(saler?.role=='saler'){%>checked<%}%> onchange="if (checked) document.getElementById('labelAddress').innerText='Адрес склада'; else document.getElementById('labelAddress').innerText='Адрес доставки';">
+        <label class="form-check-label" for="inputRole">Продавец</label>
+    </div>
+
+    <div id="labelAddress" for="inputAddress" class="col-sm-2 col-form-label">Адрес <%if(saler?.role!='saler'){%>доставки<%}else{%>склада<%}%></div>
+    <div class="row mb-3">
+        <div class="col-sm-3">
+            <input name="town" class="form-control" id="inputAddressTown" placeholder="Город"
+                value="<%= saler?.town %>">
+        </div>
+        <div class="col-sm-3">
+            <input name="street" class="form-control" id="inputAddressStreet" placeholder="Улица"
+                value="<%= saler?.street %>">
+        </div>
+        <div class="col-sm-2">
+            <input name="house" class="form-control" id="inputAddressHouse" placeholder="Дом"
+                value="<%= saler?.house %>">
+        </div>
+        <div class="col-sm-2">
+            <input name="entrace" class="form-control" id="inputAddressEntrace" placeholder="Подъезд"
+                value="<%= saler?.entrance %>">
+        </div>
+        <div class="col-sm-2">
+            <input name="appartment" class="form-control" id="inputAddressAppartments" placeholder="Квартира"
+                value="<%= saler?.appartment %>">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="inputAddressAddition" class="col-sm-2 col-form-label ">Дополнительная информация</label>
+        <div class="col-sm-10">
+            <textarea name="addition" class="form-control" id="inputAddressAddition"
+                placeholder="Дополнительно: код домофона или предпочтительное время доставки"><%= saler?.addition %></textarea>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="inputPhone" class="col-sm-2 col-form-label">Телефон</label>
+        <div class="col-sm-10">
+            <input type="text" name="phone" class="form-control" id="inputPhone" placeholder="Телефон"
+                value="<%= saler?.phone %>">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Запомнить</button>
+</form>
