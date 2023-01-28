@@ -11,7 +11,8 @@ const dotenv=require('dotenv');
 mongoose.set('strictQuery', false);
 const autopopulate = require('mongoose-autopopulate');
 dotenv.config();
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect("mongodb+srv://tgbotsoft:Inf@978764@cluster0.hnqzhaj.mongodb.net/shop?retryWrites=true&w=majority");
+//
 mongoose.Promise = global.Promise;
 
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -156,7 +157,7 @@ fastify.listen(
     }
     console.log(`Your app is listening on ${address}`);
     let o=new Order();
-    o.
+    o.orderDate == new Date();
     await o.save();
   }
 );
