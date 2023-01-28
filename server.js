@@ -1,26 +1,26 @@
 const path = require("path");
 const resolve = require('path').resolve;
+const PaymentCode=require('@kiraind/gost-r-56042-2014');
 
-// Require the fastify framework and instantiate it
 const fastify = require("fastify")({
-  // Set this to true for detailed logging:
-  logger: false,
+    // Set this to true for detailed logging:
+    logger: false,
 });
 
 const mongoose = require('mongoose');
-const dotenv=require('dotenv');
+const dotenv = require('dotenv');
 
 mongoose.set('strictQuery', false);
 const autopopulate = require('mongoose-autopopulate');
 dotenv.config();
-mongoose.connect("mongodb+srv://tgbotsoft:Inf978764@cluster0.hnqzhaj.mongodb.net/shop?retryWrites=true&w=majority");
+mongoose.connect(process.env.MONGO_URL);
 //
 mongoose.Promise = global.Promise;
 
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 const Schema = mongoose.Schema;
 const Types = mongoose.Types;
-const model=mongoose.model;
+const model = mongoose.model;
 
 let Orders_schema = new Schema({
     orderDate: Date,
@@ -61,8 +61,7 @@ let client_schema = new Schema({
     password: String,
     fullName: {
         type: String,
-        unique: true,
-        required: true
+        unique: true
     },
     phone: String,
     town: String,
@@ -126,64 +125,31 @@ const Clients = model('Clients', client_schema);
 
 // Setup our static files
 fastify.register(require("@fastify/static"), {
-  root: path.join(__dirname, "public"),
-  prefix: "/", // optional: default '/'
+    root: path.join(process.cwd(), "public"),
+    prefix: "/", // optional: default '/'
 });
 
-// Formbody lets us parse incoming forms
 fastify.register(require("@fastify/formbody"));
 
-// View is a templating manager for fastify
-// fastify.register(require("@fastify/view"), {
-//   engine: {
-//     handlebars: require("handlebars"),
-//   },
-// });
 fastify.register(require('@fastify/view'), {
-  engine: {
-    ejs: require('ejs')
-  }
+    engine: {
+        ejs: require('ejs'),
+    },
+    includeViewExtension: true,
+    viewExt: 'ejs',
+    root: path.join(process.cwd(), 'views')
 })
 
-// Load and parse SEO data
-const seo = require("./src/seo.json");
-if (seo.url === "glitch-default") {
-  seo.url = `https://${process.env.PROJECT_DOMAIN}.glitch.me`;
-}
-
-/**
- * Our home page route
- *
- * Returns src/pages/index.hbs with data built into it
- */
 fastify.get("/", function (request, reply) {
-  // params is an object we'll pass to our handlebars template
-  let params = { seo: seo };
-
-  // If someone clicked the option for a random color it'll be passed in the querystring
-  if (request.query.randomize) {
-    // We need to load our color data file, pick one at random, and add it to the params
-    // const colors = require("./src/colors.json");
-    // const allColors = Object.keys(colors);
-    // let currentColor = allColors[(allColors.length * Math.random()) << 0];
-
-    // Add the color properties to the params object
-    params = {
-      // color: colors[currentColor],
-      // colorError: null,
-      seo: seo,
-    };
-  }
-
-  // The Handlebars code will be able to access the parameter values and build them into the page
-  return reply.view("/index.html", params);
+    try{
+        return reply.sendFile("index.html");
+    }
+    catch (err){
+        console.log(err);
+        return err;
+    }
 });
 
-/**
- * Our POST route to handle and react to form submissions
- *
- * Accepts body data indicating the user choice
- */
 // fastify.post("/", function (request, reply) {
 //   // Build the params object to pass to the template
 //   let params = { seo: seo };
@@ -222,14 +188,14 @@ fastify.get("/", function (request, reply) {
 //   return reply.view("/src/pages/index.hbs", params);
 // });
 
-fastify.post("/userprofile", async function (q, r){
-    let { salerId, role, login, password, FullName, phone, town, street, house, entrance, appartment, addition, volume, pail, appendix } = q.body;
+fastify.post("/userprofile", async function (q, r) {
+    let { salerId, role, login, password, fullName, phone, town, street, house, entrance, appartment, addition } = q.body;
     let client = salerId ? await Clients.findById(salerId) : null;
     if (!client) { // клиент не существует создаем его
         client = new Clients();
         client.login = login;
         client.password = password;
-        client.fullName = FullName;
+        client.fullName = fullName;
         client.phone = phone;
         client.town = town;
         client.street = street;
@@ -244,26 +210,84 @@ fastify.post("/userprofile", async function (q, r){
     if (client.role === 'buyer') {
         let order = await Orders.findOne({ 'orderDate': getSatuгDay(new Date()), 'client': client._id });
         let P = await Prices.toAssociativeArray();
-        r.render('orderM', { saler: client?._id, order: order, prices: P });
-        // r.render('order', { saler: client._id, order: order, prices: P });
+        return r.view('orderM', { 'saler': client?._id, 'order': order, 'prices': P });
     } else {
         let orders = await Orders.find({ orderDate: getSatuгDay(new Date()) }).sort('-volume');
-        r.render('DispNextOrders', { 'saler': client._id, 'date': getSatuгDay(new Date()).toLocaleDateString(), 'orders': orders });
+        return r.view('DispNextOrders', { 'saler': client._id, 'date': getSatuгDay(new Date()).toLocaleDateString(), 'orders': orders });
     }
-
-  // r.send ({hello:'world'});
 });
+
+fastify.post('/saveOrder', async (q, r) => {
+    let { clientId, orderId, volume, product, appendix } = q.body;
+    let O = (orderId !== '') ? await Orders.findById(orderId) : null;
+    if (!O) {
+        O = new Orders();
+    }
+    O.client = clientId;
+    for (let i = 0; i < product.length; i++) {
+        if (volume[i])
+            O.item.push({ product: product[i], volume: volume[i] });
+    }
+    O.orderDate = getSatuгDay(new Date());
+    O.appendix = appendix;
+    await O.save();
+
+    //QR
+    let P = await Prices.toAssociativeArray();
+    let x = 0;
+    let orderSumm = O.item.map(i => x += i.volume * P[i.product._id].price).reverse()[0];
+    const pngBuffer = await PaymentCode.toDataURL({
+        Name: process.env.Firm,
+        PersonalAcc: process.env.PersonalAcc,
+        CorrespAcc: process.env.CorrespAcc,
+        PayeeINN: process.env.PayeeINN,
+
+        BankName: process.env.BankName,
+        BIC: process.env.BIC,
+        // Name: 'ООО "Три кита"',
+        // PersonalAcc: '40702810138250123017',
+        // CorrespAcc: '30101810400000000225',
+        // PayeeINN: '6200098765',
+
+        // BankName: 'ОАО "БАНК"',
+        // BIC: '044525225',
+
+        // LastName: 'Иванов',
+        // FirstName: 'Иван',
+        // MiddleName: 'Иванович',
+        Purpose: `Оплата по счету ${O?._id}`,
+        // Purpose: 'Оплата членского взноса',
+        // PayerAddress: 'г.Рязань, ул.Ленина, д.10, кв.15',
+
+        Sum: orderSumm
+    }, {
+        scale: 5,
+        errorCorrectionLevel: 'L'
+    })
+        .then(url => {return r.view('confirmation', {
+            order: O, date: getSatuгDay(new Date()).toLocaleDateString(), URL: url, orderSumm: orderSumm
+        })})
+        .catch(err => {
+            console.debug(err)
+            return r.status(500).send(err);
+        })
+    //QR
+    // r.render('confirmation', { id: O?._id, date: getSatuгDay(new Date()).toLocaleDateString(), URL: url });
+});
+
+
+
 
 // Run the server and report out to the logs
 fastify.listen(
-  { port: process.env.PORT, host: "0.0.0.0" },
-  async function (err, address) {
-    if (err) {
-      console.error(err);
-      process.exit(1);
+    { port: process.env.PORT, host: "0.0.0.0" },
+    async function (err, address) {
+        if (err) {
+            console.error(err);
+            process.exit(1);
+        }
+        console.log(`Your app is listening on ${address}`);
     }
-    console.log(`Your app is listening on ${address}`);
-  }
 );
 
 function getSatuгDay(date) {

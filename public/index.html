@@ -11,7 +11,7 @@
     <script src="/sha256.min.js"></script>
     <script>
         function sendCreditial() {
-            let username = document.getElementById('inputLogin').value;
+            // let username = document.getElementById('inputLogin').value;
             let securePass = sha256(document.getElementById('inputPass').value);
             document.getElementById('inputPass').value=securePass;
         //     fetch('https://ipgip.github.io/milk/public/ok.html', {
@@ -68,13 +68,13 @@
               <div class="mb-3 row">
                   <label for="inputLogin" class="col-4 col-form-label">Login:</label>
                   <div class="col-8">
-                      <input type="text" class="form-control" name="inputLogin" id="inputLogin" placeholder="Login">
+                      <input type="text" class="form-control" name="login" id="inputLogin" placeholder="Login">
                   </div>
               </div>
               <div class="mb-3 row">
                   <label for="inputPass" class="col-4 col-form-label">Пароль:</label>
                   <div class="col-8">
-                      <input type="password" class="form-control" name="inputPass" id="inputPass"
+                      <input type="password" class="form-control" name="password" id="inputPass"
                           placeholder="Пароль">
                   </div>
               </div>

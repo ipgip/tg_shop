@@ -1,7 +1,7 @@
 {
-  "name": "glitch-hello-node",
-  "version": "0.1.0",
-  "description": "A simple Node app built on fastify, instantly up and running. Built to be remixed on Glitch.com.",
+  "name": "boot_shop",
+  "version": "0.0.1",
+  "description": "IGP shop for bot",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -13,16 +13,10 @@
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "fastify": "^4.11.0",
-    "handlebars": "^4.7.7",
     "mongoose": "^6.8.3",
     "mongoose-autopopulate": "^0.17.1",
+    "@kiraind/gost-r-56042-2014": "^1.0.0",
     "point-of-view": "^6.3.0"
-  },
-  "engines": {
-    "node": "14.x"
-  },
-  "repository": {
-    "url": "https://glitch.com/edit/#!/glitch-hello-node"
   },
   "license": "MIT",
   "keywords": [
