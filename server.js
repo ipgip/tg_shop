@@ -7,6 +7,40 @@ const fastify = require("fastify")({
 });
 
 const mongoose = require('mongoose');
+const dotenv=require('dotenv');
+mongoose.set('strictQuery', false);
+const autopopulate = require('mongoose-autopopulate');
+dotenv.config();
+mongoose.connect(process.env.MONGO_URL);
+mongoose.Promise = global.Promise;
+
+mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
+const Schema = mongoose.Schma;
+
+let Orders_schema = new Schema({
+    orderDate: Date,
+    client: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Clients',
+        autopopulate: true
+    },
+    item: [{
+        product: {
+            type: Schema.Types.ObjectId,
+            ref: 'Prices',
+            autopopulate: true
+        },
+        volume: Number,                 // Литры
+    }],
+    // pail: {                         // ведро
+    //     type: String,
+    //     enum: ['None', '10 л', '5 л'],
+    //     trim: true,
+    //     default: 'None'
+    // },
+    appendix: String
+});
+Orders_schema.plugin(autopopulate);
 
 // ADD FAVORITES ARRAY VARIABLE FROM TODO HERE
 

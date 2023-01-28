@@ -7,11 +7,14 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "fastify": "^4.11.0",
-    "handlebars": "^4.7.7",
     "@fastify/formbody": "^7.4.0",
     "@fastify/static": "^6.6.0",
-    "@fastify/view": "^7.3.0"
+    "@fastify/view": "^7.3.0",
+    "dotenv": "^16.0.3",
+    "fastify": "^4.11.0",
+    "handlebars": "^4.7.7",
+    "mongoose": "^6.8.3",
+    "mongoose-autopopulate": "^0.17.1"
   },
   "engines": {
     "node": "14.x"
