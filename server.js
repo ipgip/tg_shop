@@ -1,4 +1,5 @@
 const path = require("path");
+const resolve = require('path').resolve;
 
 // Require the fastify framework and instantiate it
 const fastify = require("fastify")({
@@ -133,11 +134,22 @@ fastify.register(require("@fastify/static"), {
 fastify.register(require("@fastify/formbody"));
 
 // View is a templating manager for fastify
-fastify.register(require("@fastify/view"), {
+// fastify.register(require("@fastify/view"), {
+//   engine: {
+//     handlebars: require("handlebars"),
+//   },
+// });
+fastify.register(require('./index'), {
   engine: {
-    handlebars: require("handlebars"),
+    ejs: require('ejs')
   },
-});
+  includeViewExtension: true,
+  templates: './view',
+  options: {
+    filename: resolve('./view')
+  },
+  charset: 'utf-8' // sample usage, but specifying the same value already used as default
+})
 
 // Load and parse SEO data
 const seo = require("./src/seo.json");
