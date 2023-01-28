@@ -60,7 +60,7 @@ fastify.get("/", function (request, reply) {
   }
 
   // The Handlebars code will be able to access the parameter values and build them into the page
-  return reply.view("/index.hbs", params);
+  return reply.view("/index.html", params);
 });
 
 /**
@@ -117,3 +117,7 @@ fastify.listen(
     console.log(`Your app is listening on ${address}`);
   }
 );
+
+fastify.post("/usrprofile", function (request, reply){
+  return reply {hello:'world};
+}
