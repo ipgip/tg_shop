@@ -139,7 +139,7 @@ fastify.register(require("@fastify/formbody"));
 //     handlebars: require("handlebars"),
 //   },
 // });
-fastify.register(require('point-of-view'), {
+fastify.register(require('@fastify/view'), {
   engine: {
     ejs: require('ejs')
   }
