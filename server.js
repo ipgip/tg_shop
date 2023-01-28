@@ -11,7 +11,7 @@ const dotenv=require('dotenv');
 mongoose.set('strictQuery', false);
 const autopopulate = require('mongoose-autopopulate');
 dotenv.config();
-mongoose.connect("mongodb+srv://tgbotsoft:Inf@978764@cluster0.hnqzhaj.mongodb.net/shop?retryWrites=true&w=majority");
+mongoose.connect("mongodb+srv://tgbotsoft:Inf978764@cluster0.hnqzhaj.mongodb.net/shop?retryWrites=true&w=majority");
 //
 mongoose.Promise = global.Promise;
 
@@ -27,11 +27,11 @@ let Orders_schema = new Schema({
         autopopulate: true
     },
     item: [{
-        product: {
-            type: Schema.Types.ObjectId,
-            ref: 'Prices',
-            autopopulate: true
-        },
+        // product: {
+        //     type: Schema.Types.ObjectId,
+        //     ref: 'Prices',
+        //     autopopulate: true
+        // },
         volume: Number,                 // Литры
     }],
     // pail: {                         // ведро
