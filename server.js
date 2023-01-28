@@ -42,6 +42,9 @@ let Orders_schema = new Schema({
     appendix: String
 });
 Orders_schema.plugin(autopopulate);
+const Order = mongoose.model('Order', Orders_schema);
+
+
 
 // ADD FAVORITES ARRAY VARIABLE FROM TODO HERE
 
@@ -146,12 +149,15 @@ fastify.post("/userprofile", function (request, reply){
 // Run the server and report out to the logs
 fastify.listen(
   { port: process.env.PORT, host: "0.0.0.0" },
-  function (err, address) {
+  async function (err, address) {
     if (err) {
       console.error(err);
       process.exit(1);
     }
     console.log(`Your app is listening on ${address}`);
+    let o=new Order();
+    o.
+    await o.save();
   }
 );
 
