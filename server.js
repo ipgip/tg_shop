@@ -36,12 +36,6 @@ let Orders_schema = new Schema({
         },
         volume: Number,                 // Литры
     }],
-    // pail: {                         // ведро
-    //     type: String,
-    //     enum: ['None', '10 л', '5 л'],
-    //     trim: true,
-    //     default: 'None'
-    // },
     appendix: String
 });
 Orders_schema.plugin(autopopulate);
@@ -123,9 +117,9 @@ price_schema.statics.toAssociativeArray = async function () {
     return ret;
 };
 
-const Order = model('Order', Orders_schema);
-const Price = model('Price', price_schema);
-const Client = model('Client' client_schema);
+const Orders = model('Orders', Orders_schema);
+const Prices = model('Prices', price_schema);
+const Clients = model('Clients', client_schema);
 
 // ADD FAVORITES ARRAY VARIABLE FROM TODO HERE
 
@@ -222,9 +216,36 @@ fastify.post("/", function (request, reply) {
   return reply.view("/src/pages/index.hbs", params);
 });
 
-fastify.post("/userprofile", function (request, reply){
-  console.log(request.body);
-  reply.send ({hello:'world'});
+fastify.post("/userprofile", async function (q, r){
+    let { salerId, role, login, password, FullName, phone, town, street, house, entrance, appartment, addition, volume, pail, appendix } = q.body;
+    let client = salerId ? await Clients.findById(salerId) : null;
+    if (!client) { // клиент не существует создаем его
+        client = new Clients();
+        client.login = login;
+        client.password = password;
+        client.fullName = FullName;
+        client.phone = phone;
+        client.town = town;
+        client.street = street;
+        client.house = house;
+        client.entrance = entrance;
+        client.appartment = appartment;
+        client.addition = addition;
+        client.role = role == 'on' ? 'saler' : 'buyer';
+        await client.save();
+    }
+    // выбор действий в зависимости от роли пользователя
+    if (client.role === 'buyer') {
+        let order = await Orders.findOne({ 'orderDate': getSatuгDay(new Date()), 'client': client._id });
+        let P = await Prices.toAssociativeArray();
+        r.render('orderM', { saler: client?._id, order: order, prices: P });
+        // r.render('order', { saler: client._id, order: order, prices: P });
+    } else {
+        let orders = await Orders.find({ orderDate: getSatuгDay(new Date()) }).sort('-volume');
+        r.render('DispNextOrders', { 'saler': client._id, 'date': getSatuгDay(new Date()).toLocaleDateString(), 'orders': orders });
+    }
+
+  // r.send ({hello:'world'});
 });
 
 // Run the server and report out to the logs
@@ -236,9 +257,12 @@ fastify.listen(
       process.exit(1);
     }
     console.log(`Your app is listening on ${address}`);
-    let o=new Order();
-    o.orderDate == new Date();
-    await o.save();
   }
 );
 
+function getSatuгDay(date) {
+    let d = new Date(date);
+    let dayNumber = d.getDay();
+    let r = new Date(d.getFullYear(), d.getMonth(), d.getDate() - dayNumber + 6);
+    return r;
+}
