@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="RU">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Title</title>
+  <!-- Bootstrap CSS v5.2.1 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="sha256.min.js"></script>
+    <script>
+        function sendCreditial() {
+            let username = document.getElementById('inputLogin').value;
+            let securePass = sha256(document.getElementById('inputPass').value);
+            document.getElementById('inputPass').value=securePass;
+        //     fetch('https://ipgip.github.io/milk/public/ok.html', {
+        //         method: "POST",
+        //         mode: "cors",
+        //         headers: { "Content-Type": "application/json; charset=UTF-8" },
+        //         body: JSON.stringify({
+        //             login: username,
+        //             password: securePass
+        //         })
+        //     })
+        //         .then(resp => resp.text())
+        //         .then(text => document.write(text))
+        //         .catch(err => document.write(err));
+        }
+    </script>
+</head>
+
+<body>
+  <header>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+          role="tab" aria-controls="home" aria-selected="true">Home</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
+          role="tab" aria-controls="profile" aria-selected="false">Заказ</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages" type="button"
+          role="tab" aria-controls="messages" aria-selected="false">Messages</button>
+      </li>
+    </ul>
+
+
+  </header>
+  <main>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+        laborum.
+      </div>
+      <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="container">
+          <!-- <form method="post" action="/login"> -->
+          <form method="post" action="http://profrgu.keenetic.pro:8030/userprofile">
+              <div class="mb-3 row">
+                  <label for="inputLogin" class="col-4 col-form-label">Login:</label>
+                  <div class="col-8">
+                      <input type="text" class="form-control" name="inputLogin" id="inputLogin" placeholder="Login">
+                  </div>
+              </div>
+              <div class="mb-3 row">
+                  <label for="inputPass" class="col-4 col-form-label">Пароль:</label>
+                  <div class="col-8">
+                      <input type="password" class="form-control" name="inputPass" id="inputPass"
+                          placeholder="Пароль">
+                  </div>
+              </div>
+              <button type="button" class="btn btn-primary" onclick="sendCreditial()">Ввод</button>
+          </form>
+      </div>
+
+      </div>
+      <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab"> messages </div>
+    </div>
+  </main>
+  <footer>
+    <p class="text-center">
+      &copy;<a href="mailto:igp@hbc-soft.ru" class="badge text-primary">Igor Peymer</a> <a href="http://hbc-soft.ru"
+        class="badge text-primary" target="blank">ООО "HBC"</a>
+    </p>
+  </footer>
+  <!-- Bootstrap JavaScript Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+    </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+    integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>
