@@ -106,6 +106,11 @@ fastify.post("/", function (request, reply) {
   return reply.view("/src/pages/index.hbs", params);
 });
 
+fastify.post("/userprofile", function (request, reply){
+  console.log(request.body);
+  return reply ({hello:'world'});
+});
+
 // Run the server and report out to the logs
 fastify.listen(
   { port: process.env.PORT, host: "0.0.0.0" },
@@ -118,7 +123,3 @@ fastify.listen(
   }
 );
 
-fastify.post("/userprofile", function (request, reply){
-  console.log(request.body);
-  return reply ({hello:'world'});
-});
