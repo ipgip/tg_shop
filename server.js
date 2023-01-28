@@ -15,7 +15,8 @@ mongoose.connect(process.env.MONGO_URL);
 mongoose.Promise = global.Promise;
 
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
-const Schema = mongoose.Schma;
+const Schema = mongoose.Schema;
+const Types = mongoose.Types;
 
 let Orders_schema = new Schema({
     orderDate: Date,
