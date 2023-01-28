@@ -118,6 +118,7 @@ fastify.listen(
   }
 );
 
-fastify.post("/usrprofile", function (request, reply){
-  return reply {hello:'world};
-}
+fastify.post("/userprofile", function (request, reply){
+  console.log(request.body);
+  return reply ({hello:'world'});
+});
