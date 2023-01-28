@@ -15,7 +15,8 @@
     "fastify": "^4.11.0",
     "handlebars": "^4.7.7",
     "mongoose": "^6.8.3",
-    "mongoose-autopopulate": "^0.17.1"
+    "mongoose-autopopulate": "^0.17.1",
+    "point-of-view": "^6.3.0"
   },
   "engines": {
     "node": "14.x"

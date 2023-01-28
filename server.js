@@ -139,16 +139,10 @@ fastify.register(require("@fastify/formbody"));
 //     handlebars: require("handlebars"),
 //   },
 // });
-fastify.register(require('ejs'), {
+fastify.register(require('point-of-view'), {
   engine: {
     ejs: require('ejs')
-  },
-  includeViewExtension: true,
-  templates: './view',
-  options: {
-    filename: resolve('./view')
-  },
-  charset: 'utf-8' // sample usage, but specifying the same value already used as default
+  }
 })
 
 // Load and parse SEO data
